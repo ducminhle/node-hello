@@ -11,10 +11,6 @@ docker push $DOCKER_USER/node-hello:$GIT_TAG
 docker tag node-hello $DOCKER_USER/node-hello:latest
 docker push $DOCKER_USER/node-hello:latest
 
-echo "-----BEGIN RSA PRIVATE KEY-----" >> ssh.pem
-echo $PEM_FILE >> ssh.pem
-echo "-----END RSA PRIVATE KEY-----" >> ssh.pem
-chmod 600 ssh.pem
-cat ssh.pem
-ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -i ssh.pem ubuntu@$SERVER 'docker stop $(docker ps -a -q)'
-ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -i ssh.pem ubuntu@$SERVER 'docker run -itd -e "ENV=prod" -e "VERSION=${GIT_TAG}" --network host minhducle/node-hello:${GIT_TAG}'
+chmod 600 deploy_rsa
+ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -i deploy_rsa ubuntu@$SERVER 'docker stop $(docker ps -a -q)'
+ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -i deploy_rsa ubuntu@$SERVER 'docker run -itd -e "ENV=prod" -e "VERSION=${GIT_TAG}" --network host minhducle/node-hello:${GIT_TAG}'
