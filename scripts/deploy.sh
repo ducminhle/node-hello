@@ -11,7 +11,7 @@ docker push $DOCKER_USER/node-hello:$GIT_TAG
 docker tag node-hello $DOCKER_USER/node-hello:latest
 docker push $DOCKER_USER/node-hello:latest
 
-cat $PEM_FILE >> ssh.pem
+echo $PEM_FILE >> ssh.pem
 chmod 600 ssh.pem
 ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -i ssh.pem ubuntu@$SERVER 'docker stop $(docker ps -a -q)'
 ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -i ssh.pem ubuntu@$SERVER 'docker run -itd -e "ENV=prod" -e "VERSION=${GIT_TAG}" --network host minhducle/node-hello:${GIT_TAG}'
