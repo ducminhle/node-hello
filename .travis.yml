@@ -9,7 +9,7 @@ branches:
   - master
 script:
 - docker build -t node-hello -f Dockerfile .
-before_install:
+before_deploy:
 - openssl aes-256-cbc -K $encrypted_db2095f63ba3_key -iv $encrypted_db2095f63ba3_iv
   -in deploy_rsa.enc -out deploy_rsa -d
 deploy:
