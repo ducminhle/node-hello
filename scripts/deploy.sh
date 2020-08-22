@@ -12,6 +12,7 @@ docker push $DOCKER_USER/node-hello:$GIT_TAG
 docker tag node-hello $DOCKER_USER/node-hello:latest
 docker push $DOCKER_USER/node-hello:latest
 
+openssl aes-256-cbc -K $encrypted_db2095f63ba3_key -iv $encrypted_db2095f63ba3_iv -in deploy_rsa.enc -out deploy_rsa -d
 chmod 600 deploy_rsa
 ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -i deploy_rsa ubuntu@$SERVER 'docker stop $(docker ps -a -q)'
 ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -i deploy_rsa ubuntu@$SERVER 'docker run -itd -e "ENV=prod" -e "VERSION=${GIT_TAG}" --network host minhducle/node-hello:${GIT_TAG}'
