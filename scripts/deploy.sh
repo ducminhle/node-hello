@@ -2,8 +2,10 @@
 git config --global user.email "builds@travis-ci.org"
 git config --global user.name "Travis CI"
 export GIT_TAG=v0.1.$TRAVIS_BUILD_NUMBER
+git stash
 git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
 git push -q https://github.com/ducminhle/node-hello.git --tags
+git stash apply stash@{0}
 
 docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 docker tag node-hello $DOCKER_USER/node-hello:$GIT_TAG
